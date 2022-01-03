@@ -86,7 +86,7 @@ public class NioEchoServer {
             bytes[i] = arr.get(i);
         }
 
-        String s = new String (bytes, "UTF-8");
+        String s = new String (bytes, StandardCharsets.UTF_8);
 
         System.out.println("Received: " + s);
         String[] tokens = s.toString().split("\\s+", 2);
