@@ -13,9 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileAttribute;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 public class NioEchoServer {
 
@@ -63,7 +61,8 @@ public class NioEchoServer {
 
     private void handleRead(SelectionKey key) throws IOException {
         SocketChannel channel = (SocketChannel) key.channel();
-        StringBuilder s = new StringBuilder();
+        //StringBuilder s = new StringBuilder();
+        List<Byte> arr = new ArrayList<>();
         int read = 0;
         while (true) {
             read = channel.read(buf);
@@ -76,11 +75,19 @@ public class NioEchoServer {
             }
             buf.flip();
             while (buf.hasRemaining()) {
-                s.append((char) buf.get());
+                //s.append((char) buf.get());
+                arr.add(buf.get());
             }
             buf.clear();
         }
         // process(s)
+        byte[] bytes = new byte[arr.size()];
+        for (int i = 0; i < arr.size(); i++){
+            bytes[i] = arr.get(i);
+        }
+
+        String s = new String (bytes, "UTF-8");
+
         System.out.println("Received: " + s);
         String[] tokens = s.toString().split("\\s+", 2);
         String command = tokens[0];
